@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 980" width="520" height="980" font-family="Segoe UI, sans-serif">
+  <rect width="520" height="980" fill="#0f1117"/>
+
+  <!-- Title -->
+  <text x="260" y="38" text-anchor="middle" fill="#4f8ef7" font-size="15" font-weight="700">MCA Document Downloader — Flow</text>
+
+  <!-- ── Helper: arrow defs ── -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="4" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#444a6a"/>
+    </marker>
+    <marker id="arr-green" markerWidth="8" markerHeight="8" refX="4" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#2eb872"/>
+    </marker>
+    <marker id="arr-red" markerWidth="8" markerHeight="8" refX="4" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#e05050"/>
+    </marker>
+    <marker id="arr-yellow" markerWidth="8" markerHeight="8" refX="4" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L7,3 z" fill="#f5a623"/>
+    </marker>
+  </defs>
+
+  <!-- ── STEP 1: Login ── -->
+  <rect x="40" y="60" width="280" height="64" rx="8" fill="#1a1d27" stroke="#2eb872" stroke-width="1.5"/>
+  <text x="56" y="85" fill="#2eb872" font-size="11" font-weight="700">STEP 1</text>
+  <text x="56" y="103" fill="#e4e8f0" font-size="13" font-weight="600">Login</text>
+  <text x="56" y="118" fill="#8891a8" font-size="10">Email + Password → POST /user/login</text>
+  <!-- status badge -->
+  <rect x="298" y="75" width="70" height="20" rx="10" fill="#1e3a2a"/>
+  <text x="333" y="89" text-anchor="middle" fill="#2eb872" font-size="10" font-weight="700">✅  Built</text>
+
+  <!-- arrow -->
+  <line x1="180" y1="124" x2="180" y2="148" stroke="#444a6a" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ── STEP 2: Search ── -->
+  <rect x="40" y="150" width="280" height="64" rx="8" fill="#1a1d27" stroke="#2eb872" stroke-width="1.5"/>
+  <text x="56" y="175" fill="#2eb872" font-size="11" font-weight="700">STEP 2</text>
+  <text x="56" y="193" fill="#e4e8f0" font-size="13" font-weight="600">Search Company</text>
+  <text x="56" y="208" fill="#8891a8" font-size="10">GET /search/company?query=…</text>
+  <rect x="298" y="165" width="70" height="20" rx="10" fill="#1e3a2a"/>
+  <text x="333" y="179" text-anchor="middle" fill="#2eb872" font-size="10" font-weight="700">✅  Built</text>
+
+  <line x1="180" y1="214" x2="180" y2="238" stroke="#444a6a" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ── STEP 3: Fetch Docs ── -->
+  <rect x="40" y="240" width="280" height="64" rx="8" fill="#1a1d27" stroke="#2eb872" stroke-width="1.5"/>
+  <text x="56" y="265" fill="#2eb872" font-size="11" font-weight="700">STEP 3</text>
+  <text x="56" y="283" fill="#e4e8f0" font-size="13" font-weight="600">Fetch Documents</text>
+  <text x="56" y="298" fill="#8891a8" font-size="10">GET /company/cin-docs?cin=…</text>
+  <rect x="298" y="255" width="70" height="20" rx="10" fill="#1e3a2a"/>
+  <text x="333" y="269" text-anchor="middle" fill="#2eb872" font-size="10" font-weight="700">✅  Built</text>
+
+  <line x1="180" y1="304" x2="180" y2="328" stroke="#444a6a" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ── STEP 4: Select Docs ── -->
+  <rect x="40" y="330" width="280" height="64" rx="8" fill="#1a1d27" stroke="#2eb872" stroke-width="1.5"/>
+  <text x="56" y="355" fill="#2eb872" font-size="11" font-weight="700">STEP 4</text>
+  <text x="56" y="373" fill="#e4e8f0" font-size="13" font-weight="600">Select Documents</text>
+  <text x="56" y="388" fill="#8891a8" font-size="10">Filter + checkbox UI, no API call</text>
+  <rect x="298" y="345" width="70" height="20" rx="10" fill="#1e3a2a"/>
+  <text x="333" y="359" text-anchor="middle" fill="#2eb872" font-size="10" font-weight="700">✅  Built</text>
+
+  <line x1="180" y1="394" x2="180" y2="418" stroke="#444a6a" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ── STEP 5: Pricing ── -->
+  <rect x="40" y="420" width="280" height="64" rx="8" fill="#1a1d27" stroke="#2eb872" stroke-width="1.5"/>
+  <text x="56" y="445" fill="#2eb872" font-size="11" font-weight="700">STEP 5</text>
+  <text x="56" y="463" fill="#e4e8f0" font-size="13" font-weight="600">Calculate Pricing</text>
+  <text x="56" y="478" fill="#8891a8" font-size="10">₹145/100 docs + 18% GST, live preview</text>
+  <rect x="298" y="435" width="70" height="20" rx="10" fill="#1e3a2a"/>
+  <text x="333" y="449" text-anchor="middle" fill="#2eb872" font-size="10" font-weight="700">✅  Built</text>
+
+  <line x1="180" y1="484" x2="180" y2="508" stroke="#444a6a" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ── STEP 6: saveCinDinPayment ── -->
+  <rect x="40" y="510" width="280" height="64" rx="8" fill="#1a1d27" stroke="#e05050" stroke-width="1.5"/>
+  <text x="56" y="535" fill="#e05050" font-size="11" font-weight="700">STEP 6</text>
+  <text x="56" y="553" fill="#e4e8f0" font-size="13" font-weight="600">saveCinDinPayment</text>
+  <text x="56" y="568" fill="#8891a8" font-size="10">POST /subscription/saveCinDinPayment</text>
+  <rect x="294" y="525" width="84" height="20" rx="10" fill="#3a1a1a"/>
+  <text x="336" y="539" text-anchor="middle" fill="#e05050" font-size="10" font-weight="700">❌  Missing</text>
+
+  <line x1="180" y1="574" x2="180" y2="598" stroke="#444a6a" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ── STEP 7: submit-cin-doc ── -->
+  <rect x="40" y="600" width="280" height="64" rx="8" fill="#1a1d27" stroke="#e05050" stroke-width="1.5"/>
+  <text x="56" y="625" fill="#e05050" font-size="11" font-weight="700">STEP 7</text>
+  <text x="56" y="643" fill="#e4e8f0" font-size="13" font-weight="600">submit-cin-document</text>
+  <text x="56" y="658" fill="#8891a8" font-size="10">URL + payload unknown — capture DevTools</text>
+  <rect x="294" y="615" width="84" height="20" rx="10" fill="#3a1a1a"/>
+  <text x="336" y="629" text-anchor="middle" fill="#e05050" font-size="10" font-weight="700">❌  Missing</text>
+
+  <line x1="180" y1="664" x2="180" y2="688" stroke="#444a6a" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ── STEP 8: Download ── -->
+  <rect x="40" y="690" width="280" height="64" rx="8" fill="#1a1d27" stroke="#e05050" stroke-width="1.5"/>
+  <text x="56" y="715" fill="#e05050" font-size="11" font-weight="700">STEP 8</text>
+  <text x="56" y="733" fill="#e4e8f0" font-size="13" font-weight="600">Download Documents</text>
+  <text x="56" y="748" fill="#8891a8" font-size="10">Endpoint fully unknown — capture DevTools</text>
+  <rect x="294" y="705" width="84" height="20" rx="10" fill="#3a1a1a"/>
+  <text x="336" y="719" text-anchor="middle" fill="#e05050" font-size="10" font-weight="700">❌  Missing</text>
+
+  <line x1="180" y1="754" x2="180" y2="778" stroke="#444a6a" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ── STEP 9: Files on Disk ── -->
+  <rect x="40" y="780" width="280" height="64" rx="8" fill="#1a1d27" stroke="#f5a623" stroke-width="1.5"/>
+  <text x="56" y="805" fill="#f5a623" font-size="11" font-weight="700">STEP 9</text>
+  <text x="56" y="823" fill="#e4e8f0" font-size="13" font-weight="600">Files Saved to Disk</text>
+  <text x="56" y="838" fill="#8891a8" font-size="10">backend/downloads/ + history in DB</text>
+  <rect x="294" y="795" width="84" height="20" rx="10" fill="#2a2200"/>
+  <text x="336" y="809" text-anchor="middle" fill="#f5a623" font-size="10" font-weight="700">⏳  Blocked</text>
+
+  <!-- ── Legend ── -->
+  <rect x="40" y="870" width="360" height="90" rx="8" fill="#1a1d27" stroke="#2e3250" stroke-width="1"/>
+  <text x="56" y="890" fill="#8891a8" font-size="10" font-weight="700">LEGEND</text>
+
+  <rect x="56" y="900" width="10" height="10" rx="2" fill="#2eb872"/>
+  <text x="72" y="910" fill="#e4e8f0" font-size="10">Built — works now, only needs .env</text>
+
+  <rect x="56" y="918" width="10" height="10" rx="2" fill="#e05050"/>
+  <text x="72" y="928" fill="#e4e8f0" font-size="10">Missing — capture request from Chrome DevTools</text>
+
+  <rect x="56" y="936" width="10" height="10" rx="2" fill="#f5a623"/>
+  <text x="72" y="946" fill="#e4e8f0" font-size="10">Blocked — ready, waiting on step above it</text>
+
+  <!-- ── Right side: api5.finanvo.in label ── -->
+  <rect x="400" y="60" width="100" height="784" rx="8" fill="#131620" stroke="#2e3250" stroke-width="1"/>
+  <text x="450" y="452" text-anchor="middle" fill="#4f8ef7" font-size="11" font-weight="700" transform="rotate(-90, 450, 452)">api5.finanvo.in</text>
+
+  <!-- connector lines from steps to right panel -->
+  <line x1="320" y1="92" x2="400" y2="92" stroke="#2eb872" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="320" y1="182" x2="400" y2="182" stroke="#2eb872" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="320" y1="272" x2="400" y2="272" stroke="#2eb872" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="320" y1="542" x2="400" y2="542" stroke="#e05050" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="320" y1="632" x2="400" y2="632" stroke="#e05050" stroke-width="1" stroke-dasharray="4,3"/>
+  <line x1="320" y1="722" x2="400" y2="722" stroke="#e05050" stroke-width="1" stroke-dasharray="4,3"/>
+</svg>

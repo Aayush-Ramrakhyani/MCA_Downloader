@@ -1,0 +1,70 @@
+{
+  "name": "mca-document-downloader",
+  "version": "1.0.0",
+  "description": "MCA Document Downloader Desktop App",
+  "main": "electron/dist/main.js",
+  "scripts": {
+    "dev": "concurrently --kill-others-on-fail -n BACK,FRONT,ELEC -c blue,green,yellow \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run dev:electron\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:electron": "wait-on http://localhost:5173 http://localhost:4000/api/health && tsc -p electron/tsconfig.json && electron .",
+    "build": "npm run build:backend && npm run build:frontend && npm run build:electron",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "build:electron": "tsc -p electron/tsconfig.json",
+    "dist": "npm run build && electron-builder",
+    "dist:win": "npm run build && electron-builder --win"
+  },
+  "devDependencies": {
+    "@electron/packager": "^20.2.0",
+    "concurrently": "^8.2.2",
+    "electron": "^31.0.2",
+    "electron-builder": "^24.13.3",
+    "typescript": "^5.5.3",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.aayush.mca-downloader",
+    "productName": "MCA Document Downloader",
+    "copyright": "Aayush Ramrakhyani",
+    "directories": {
+      "output": "release"
+    },
+    "extraResources": [
+      {
+        "from": "backend/dist",
+        "to": "backend/dist"
+      },
+      {
+        "from": "backend/node_modules",
+        "to": "backend/node_modules"
+      },
+      {
+        "from": "backend/data",
+        "to": "backend/data"
+      },
+      {
+        "from": "frontend/dist",
+        "to": "frontend/dist"
+      }
+    ],
+    "files": [
+      "electron/dist/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "dir",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "sign": null,
+      "signingHashAlgorithms": []
+    }
+  },
+  "allowScripts": {
+    "electron@31.7.7": true
+  }
+}

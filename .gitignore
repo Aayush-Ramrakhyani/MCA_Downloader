@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.env
+*.local
+.DS_Store
+*.log
+coverage/
+.vite/
+downloads/
+data/*.json
+!data/.gitkeep
