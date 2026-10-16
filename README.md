@@ -235,3 +235,13 @@ Tests cover: CIN validation, pricing calculation, company search normalization, 
 | `DB_PATH` | `./data/db.json` | JSON database file path |
 | `DOWNLOAD_CONCURRENCY` | `3` | Max parallel downloads |
 | `DEBUG_API` | `false` | Log sanitized request/response data |
+
+
+
+
+
+## License
+
+This project was built under a freelance contract for **Technowire Data Science**.
+All rights reserved. Not open for redistribution.
+
