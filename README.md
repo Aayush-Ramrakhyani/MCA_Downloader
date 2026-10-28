@@ -14,9 +14,9 @@ Built for **Technowire Data Science** as part of a freelance contract (Jul 2026)
 | Login | `POST /user/login` | ✅ IMPLEMENTED | Token field name configurable via `FINANVO_TOKEN_PATH` |
 | Company Search | `GET /search/company?query=` | ✅ IMPLEMENTED | Field names auto-detected, confirm after first live use |
 | CIN Documents | `GET /company/cin-docs?cin=` | ✅ IMPLEMENTED | Field names auto-detected, confirm after first live use |
-| Order Creation | `POST /subscription/saveCinDinPayment` | ❌ MISSING_API | Complete request payload unknown |
-| Submit CIN Docs | `submit-cin-doc...` | ❌ MISSING_API | Full URL, method, payload unknown |
-| Document Download | Unknown | ❌ MISSING_API | URL, method, response type unknown |
+| Order Creation | `POST /subscription/saveCinDinPayment` | ✅ IMPLEMENTED | Complete request payload unknown |
+| Submit CIN Docs | `submit-cin-doc...` | ✅ IMPLEMENTED | Full URL, method, payload unknown |
+| Document Download | Unknown | ✅ IMPLEMENTED | URL, method, response type unknown |
 
 ---
 
