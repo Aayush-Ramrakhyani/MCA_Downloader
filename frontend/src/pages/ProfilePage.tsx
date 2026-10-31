@@ -1,3 +1,8 @@
+/*
+ * ProfilePage.tsx
+ * Displays the authenticated user's Finanvo profile fields and credit balance,
+ * fetching both in parallel on mount.
+ */
 import { useState, useEffect } from 'react';
 import { accountApi, type UserProfile, type CreditBalance } from '../services/api';
 

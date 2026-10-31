@@ -1,3 +1,8 @@
+/*
+ * SearchPage.tsx
+ * Main company search page: accepts a name query, calls the companies API, and
+ * renders clickable CompanyCard results that navigate to the documents page.
+ */
 import { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { companiesApi } from '../services/api';
@@ -34,7 +39,7 @@ export default function SearchPage() {
   };
 
   const handleSelect = (company: Company) => {
-    navigate(`/documents/${company.cin}`, { state: { company } });
+    navigate(`/documents/${company.cin}`, { state: { company } }); // pass company object via router state to avoid a redundant API call
   };
 
   return (

@@ -1,9 +1,14 @@
+/*
+ * download.controller.ts
+ * Handles document download operations: queuing individual downloads, streaming
+ * a single document, and bundling multiple documents into a ZIP archive on the fly.
+ */
 import { Request, Response } from 'express';
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const archiverLib = require('archiver') as (fmt: string, opts?: object) => import('archiver').Archiver;
+const archiverLib = require('archiver') as (fmt: string, opts?: object) => import('archiver').Archiver; // no ESM export for archiver
 import { downloadQueue, downloadDocumentStream } from '../services/finanvo/download.service';
 import { getAllDownloads } from '../services/db.service';
 import { success, error } from '../utils/response';
@@ -63,7 +68,7 @@ export async function downloadZip(req: Request, res: Response): Promise<void> {
   res.setHeader('Content-Type', 'application/zip');
   res.setHeader('Content-Disposition', `attachment; filename="${zipName}"`);
 
-  const archive = archiverLib('zip', { zlib: { level: 6 } });
+  const archive = archiverLib('zip', { zlib: { level: 6 } }); // level 6 balances speed vs. compression ratio
   archive.pipe(res);
 
   // Download all files in parallel to temp files, then add to archive at once
@@ -100,7 +105,7 @@ export async function downloadZip(req: Request, res: Response): Promise<void> {
   }
 
   await archive.finalize();
-  tmpFiles.forEach(f => fs.unlink(f, () => {}));
+  tmpFiles.forEach(f => fs.unlink(f, () => {})); // clean up temp files after archive streams out
 }
 
 export async function streamDocument(req: Request, res: Response): Promise<void> {

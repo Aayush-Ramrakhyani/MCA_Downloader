@@ -1,9 +1,14 @@
+/*
+ * logger.ts
+ * Configures the Winston logger with automatic sensitive-field redaction and exposes
+ * a logApiCall helper for debug-level Finanvo HTTP tracing when DEBUG_API=true.
+ */
 import winston from 'winston';
 import { env } from './env';
 
 const SENSITIVE_KEYS = new Set([
   'password', 'token', 'access_token', 'accessToken', 'authorization',
-  'cookie', 'set-cookie', 'jwt', 'secret', 'apiKey', 'api_key',
+  'cookie', 'set-cookie', 'jwt', 'secret', 'apiKey', 'api_key', // keys whose values are replaced with [REDACTED]
 ]);
 
 function sanitize(obj: unknown, depth = 0): unknown {
@@ -18,7 +23,7 @@ function sanitize(obj: unknown, depth = 0): unknown {
 }
 
 export const logger = winston.createLogger({
-  level: env.nodeEnv === 'production' ? 'info' : 'debug',
+  level: env.nodeEnv === 'production' ? 'info' : 'debug', // suppress debug logs in production
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.errors({ stack: true }),
@@ -39,6 +44,7 @@ export const logger = winston.createLogger({
   ],
 });
 
+// Only emits when DEBUG_API=true; avoids flooding logs with large Finanvo responses in normal use
 export function logApiCall(opts: {
   method: string;
   url: string;

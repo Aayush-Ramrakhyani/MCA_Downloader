@@ -1,3 +1,9 @@
+/*
+ * order.service.ts
+ * Implements the two-step Finanvo order flow: POST /subscription/saveCinDinPayment
+ * to create the order and deduct credits, then POST /subscription/submit-cin-docs
+ * to queue the selected documents for download.
+ */
 import { finanvoClient } from './finanvo.client';
 import { logger } from '../../config/logger';
 
@@ -35,7 +41,7 @@ export async function createOrder(entries: CinDocEntry[]): Promise<PlacedOrder> 
   const totalDocs = entries.reduce((sum, e) => sum + e.docIds.length, 0);
   if (totalDocs === 0) throw new Error('VALIDATION: No documents selected.');
 
-  // ₹145 per company (CIN), not per document
+  // ₹145 per company (CIN), not per document — confirmed from live mcadownload.com pricing
   const amount = entries.length * 145;
   const gst = Math.floor(amount * 0.18);
   const totalAmount = amount + gst;
@@ -43,7 +49,7 @@ export async function createOrder(entries: CinDocEntry[]): Promise<PlacedOrder> 
   const today = new Date();
   const orderDate = formatDate(today);
 
-  // Matches mcadownload.com's getOrderDataArr() format exactly
+  // Matches mcadownload.com's getOrderDataArr() format exactly (reverse-engineered from the JS bundle)
   const dataArrObj = entries.map(e => ({
     CIN: e.cin,
     NAME: e.companyName,
@@ -51,7 +57,7 @@ export async function createOrder(entries: CinDocEntry[]): Promise<PlacedOrder> 
   }));
 
   const payload = {
-    dataArr: JSON.stringify(dataArrObj),
+    dataArr: JSON.stringify(dataArrObj), // stringified JSON array as Finanvo expects it
     orderDate,
     fromDate: orderDate,
     toDate: orderDate,
@@ -59,7 +65,7 @@ export async function createOrder(entries: CinDocEntry[]): Promise<PlacedOrder> 
     period: '1M',
     gst,
     totalAmount,
-    identiferType: 'CIN',
+    identiferType: 'CIN', // note: Finanvo's typo ("identifer" not "identifier")
     identiferDesc: 'DOWN_DOCS',
     redirectUrl: 'https://mcadownload.com/company',
   };
@@ -84,7 +90,7 @@ export async function createOrder(entries: CinDocEntry[]): Promise<PlacedOrder> 
   }
   txnIds = data.txn_ids;
 
-  // Build submitCinDocs payload — mirrors mcadownload.com post-payment flow
+  // Build submitCinDocs payload — mirrors mcadownload.com post-payment flow (step 2 of 2)
   const cinDocsPayload: SubmitCinDocsItem[] = txnIds
     .map((txnId, i) => {
       const entry = entries[i];

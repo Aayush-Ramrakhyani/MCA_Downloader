@@ -1,11 +1,11 @@
-/**
- * Document service tests.
- * Uses mocked Finanvo client responses to test normalization logic.
- * These tests do NOT call the live API.
+/*
+ * document.test.ts
+ * Unit tests for the document service: CIN validation, response normalisation, and
+ * handling of wrapped response shapes. Uses a mocked Finanvo client — no live API calls.
  */
 import { isValidCin } from '../src/utils/cin';
 
-// Mock the finanvoClient before importing the service
+// Mock the finanvoClient before importing the service (Jest hoists this above imports)
 jest.mock('../src/services/finanvo/finanvo.client', () => ({
   finanvoClient: {
     get: jest.fn(),

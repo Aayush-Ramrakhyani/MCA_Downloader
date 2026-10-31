@@ -1,3 +1,9 @@
+/*
+ * db.service.ts
+ * Lightweight flat-file JSON database for persisting sessions, orders, and download
+ * records between requests. Reads and writes a single JSON file on every operation —
+ * suitable for a single-user desktop app but not for concurrent server deployments.
+ */
 import fs from 'fs';
 import path from 'path';
 import { env } from '../config/env';
@@ -91,7 +97,7 @@ export function saveSession(session: Session): void {
   db.sessions = db.sessions.filter(s => s.id !== session.id);
   db.sessions.push(session);
   const now = Date.now();
-  db.sessions = db.sessions.filter(s => s.expiresAt > now);
+  db.sessions = db.sessions.filter(s => s.expiresAt > now); // evict expired sessions on every write
   write(db);
 }
 

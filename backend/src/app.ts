@@ -1,3 +1,8 @@
+/*
+ * app.ts
+ * Configures and exports the Express application: security middleware, CORS, rate
+ * limiting, all API route mounts, SPA static-file serving, and the global error handler.
+ */
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
@@ -22,7 +27,7 @@ const isProduction = env.nodeEnv === 'production';
 
 // In production (Electron), serve the built React frontend
 const frontendDistPath = isProduction
-  ? path.join((process as NodeJS.Process & { resourcesPath?: string }).resourcesPath ?? '', 'frontend', 'dist')
+  ? path.join((process as NodeJS.Process & { resourcesPath?: string }).resourcesPath ?? '', 'frontend', 'dist') // Electron bundles frontend into resources/
   : null;
 
 if (isProduction && frontendDistPath && fs.existsSync(frontendDistPath)) {
@@ -30,10 +35,10 @@ if (isProduction && frontendDistPath && fs.existsSync(frontendDistPath)) {
   logger.info(`Serving frontend from ${frontendDistPath}`);
 }
 
-app.use(helmet({ contentSecurityPolicy: false }));
+app.use(helmet({ contentSecurityPolicy: false })); // CSP disabled — Electron's webview injects inline scripts
 app.use(cors({
   origin: env.clientUrl,
-  credentials: true,
+  credentials: true, // needed so the browser sends the mca_session cookie
 }));
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true, limit: '1mb' }));
@@ -42,7 +47,7 @@ app.use(cookieParser());
 app.use(rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 200,
-  skip: () => env.nodeEnv === 'test',
+  skip: () => env.nodeEnv === 'test', // bypass rate limit during Jest runs
   standardHeaders: true,
   legacyHeaders: false,
   message: { success: false, message: 'Too many requests, please try again later.' },
@@ -68,7 +73,7 @@ app.get('/api/integration-status', (_req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/account', accountRoutes);
 app.use('/api/companies', companyRoutes);
-app.use('/api/companies', documentRoutes);
+app.use('/api/companies', documentRoutes); // documents are nested under /api/companies/:cin/documents
 app.use('/api/orders', orderRoutes);
 app.use('/api/downloads', downloadRoutes);
 

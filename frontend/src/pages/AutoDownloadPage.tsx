@@ -1,3 +1,9 @@
+/*
+ * AutoDownloadPage.tsx
+ * Electron-only "fire-and-forget" page: on mount it fetches all completed orders,
+ * then sequentially downloads each company's documents as a ZIP, shows progress,
+ * and auto-logs out with a countdown when all downloads are done.
+ */
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { accountApi, companiesApi, downloadsApi } from '../services/api';
@@ -54,7 +60,7 @@ export default function AutoDownloadPage() {
     setJobs(prev => prev.map((j, idx) => idx === i ? { ...j, ...update } : j));
 
   useEffect(() => {
-    if (started.current) return;
+    if (started.current) return; // guard against React StrictMode double-invoke
     started.current = true;
 
     (async () => {
@@ -103,7 +109,7 @@ export default function AutoDownloadPage() {
         }
       }
 
-      // Countdown then auto-logout
+      // Countdown then auto-logout (gives the user a chance to abort or stay logged in)
       setPhase('done');
       let c = 5;
       const timer = setInterval(() => {

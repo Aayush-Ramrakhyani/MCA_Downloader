@@ -1,3 +1,9 @@
+/*
+ * finanvo.client.ts
+ * Singleton Axios-based HTTP client for the Finanvo API (api5.finanvo.in). Manages
+ * the auth token, injects it on every request, logs all calls when DEBUG_API is on,
+ * and normalizes Axios errors for upstream callers.
+ */
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { env } from '../../config/env';
 import { logApiCall, logger } from '../../config/logger';
@@ -13,14 +19,13 @@ export class FinanvoClient {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
-        'app-origin': 'https://mcadownload.com',
+        'app-origin': 'https://mcadownload.com', // required by Finanvo to identify the client app
       },
     });
 
     this.http.interceptors.request.use(config => {
       if (this.authToken) {
-        // Finanvo expects raw JWT without "Bearer " prefix
-        config.headers['Authorization'] = this.authToken;
+        config.headers['Authorization'] = this.authToken; // Finanvo expects raw JWT without "Bearer " prefix
       }
       return config;
     });
@@ -80,7 +85,7 @@ export class FinanvoClient {
   }
 
   async getStream(path: string, config?: AxiosRequestConfig): Promise<AxiosResponse> {
-    return this.http.get(path, { ...config, responseType: 'stream' });
+    return this.http.get(path, { ...config, responseType: 'stream' }); // bypasses logApiCall; callers stream the body directly
   }
 
   private handleError(method: string, path: string, err: unknown, durationMs: number): void {
@@ -98,4 +103,4 @@ export class FinanvoClient {
   }
 }
 
-export const finanvoClient = new FinanvoClient();
+export const finanvoClient = new FinanvoClient(); // shared singleton; controllers call setAuthToken() before each request

@@ -1,3 +1,8 @@
+/*
+ * response.ts
+ * Standardised JSON response helpers used by all controllers to ensure a consistent
+ * { success, data, message } envelope across the entire API.
+ */
 import { Response } from 'express';
 
 export interface ApiResponse<T = unknown> {

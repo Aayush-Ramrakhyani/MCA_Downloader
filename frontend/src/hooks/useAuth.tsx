@@ -1,3 +1,9 @@
+/*
+ * useAuth.tsx
+ * React context and hook providing authentication state (token, email, loading) and
+ * login/logout actions. Validates an existing token against the backend on mount and
+ * persists the JWT in localStorage.
+ */
 import { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
 import { authApi } from '../services/api';
 
@@ -17,7 +23,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AuthState>({
     email: null,
-    token: localStorage.getItem('mca_token'),
+    token: localStorage.getItem('mca_token'), // hydrate immediately to avoid flash of unauthenticated UI
     loading: true,
   });
 
@@ -26,10 +32,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const token = localStorage.getItem('mca_token');
       if (!token) { setState(s => ({ ...s, loading: false })); return; }
       try {
-        const res = await authApi.status();
+        const res = await authApi.status(); // verify the stored token is still valid server-side
         setState({ email: res.data.data?.email ?? null, token, loading: false });
       } catch {
-        localStorage.removeItem('mca_token');
+        localStorage.removeItem('mca_token'); // token expired or invalid — force re-login
         setState({ email: null, token: null, loading: false });
       }
     })();

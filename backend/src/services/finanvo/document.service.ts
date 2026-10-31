@@ -1,3 +1,9 @@
+/*
+ * document.service.ts
+ * Fetches the list of MCA documents for a given CIN from Finanvo and normalises
+ * the raw response into typed NormalizedDocument objects, handling multiple known
+ * field-name variants for both the document array and the company name.
+ */
 import { finanvoClient } from './finanvo.client';
 import { FinanvoDocumentRaw, FinanvoCinDocsResponse } from './types';
 import { isValidCin, normalizeCin } from '../../utils/cin';

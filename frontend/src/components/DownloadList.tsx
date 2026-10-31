@@ -1,3 +1,8 @@
+/*
+ * DownloadList.tsx
+ * Renders a list of download queue items with status icons, file names, error
+ * messages, file paths for completed items, and retry counts.
+ */
 import type { QueueItem } from '../types';
 
 const STATUS_ICONS: Record<QueueItem['status'], string> = {

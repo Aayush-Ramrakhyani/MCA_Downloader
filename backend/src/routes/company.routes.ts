@@ -1,3 +1,7 @@
+/*
+ * company.routes.ts
+ * Mounts the GET /search route for querying companies by name via the Finanvo API.
+ */
 import { Router } from 'express';
 import { search } from '../controllers/company.controller';
 import { requireAuth } from '../middleware/auth.middleware';

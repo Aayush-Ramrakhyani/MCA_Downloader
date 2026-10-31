@@ -1,3 +1,9 @@
+/*
+ * auth.middleware.ts
+ * JWT authentication middleware: extracts the token from the Authorization header
+ * or mca_session cookie, verifies it, looks up the stored session, and injects the
+ * Finanvo token and session metadata onto the request object.
+ */
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { env } from '../config/env';
@@ -14,7 +20,7 @@ declare global {
     interface Request {
       sessionId?: string;
       sessionEmail?: string;
-      finanvoToken?: string;
+      finanvoToken?: string; // the raw Finanvo JWT extracted from the session store
     }
   }
 }
@@ -22,8 +28,8 @@ declare global {
 export function requireAuth(req: Request, res: Response, next: NextFunction): void {
   const authHeader = req.headers['authorization'];
   const token = authHeader?.startsWith('Bearer ')
-    ? authHeader.slice(7)
-    : (req.cookies?.mca_session as string | undefined);
+    ? authHeader.slice(7) // strip "Bearer " prefix
+    : (req.cookies?.mca_session as string | undefined); // fall back to httpOnly cookie
 
   if (!token) {
     error(res, 'Authentication required', 401);

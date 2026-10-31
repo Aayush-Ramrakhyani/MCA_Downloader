@@ -1,3 +1,9 @@
+/*
+ * App.tsx
+ * Root component: wraps the app in AuthProvider and defines all client-side routes,
+ * gating protected pages behind ProtectedRoute and adapting the default home route
+ * depending on whether the app runs inside Electron.
+ */
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './hooks/useAuth';
 import Layout from './components/Layout';
@@ -10,12 +16,12 @@ import AccountsPage from './pages/AccountsPage';
 import ProfilePage from './pages/ProfilePage';
 import AutoDownloadPage from './pages/AutoDownloadPage';
 
-const isElectron = !!window.electronAPI?.isElectron;
+const isElectron = !!window.electronAPI?.isElectron; // controls Electron-only routes like /accounts
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { token, loading } = useAuth();
   if (loading) return <div style={{ padding: 40, textAlign: 'center' }}><span className="spinner" /></div>;
-  if (!token) return <Navigate to={isElectron ? '/accounts' : '/login'} replace />;
+  if (!token) return <Navigate to={isElectron ? '/accounts' : '/login'} replace />; // Electron starts at /accounts; web at /login
   return <>{children}</>;
 }
 

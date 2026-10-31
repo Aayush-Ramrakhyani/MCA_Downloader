@@ -1,3 +1,8 @@
+/*
+ * download.routes.ts
+ * Mounts download endpoints: queue individual documents, create ZIP bundles,
+ * list the download queue, check queue item status, and stream a single document.
+ */
 import { Router } from 'express';
 import {
   enqueueDownloads,

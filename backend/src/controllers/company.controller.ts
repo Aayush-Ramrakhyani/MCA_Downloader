@@ -1,3 +1,8 @@
+/*
+ * company.controller.ts
+ * Express controller for company search: validates the query parameter and proxies
+ * the search request to the Finanvo API via the company service.
+ */
 import { Request, Response } from 'express';
 import { searchCompanies } from '../services/finanvo/company.service';
 import { success, error } from '../utils/response';
@@ -11,7 +16,7 @@ export async function search(req: Request, res: Response): Promise<void> {
     return;
   }
 
-  // Attach session's Finanvo token for this request
+  // Attach session's Finanvo token for this request (token is injected by requireAuth middleware)
   if (req.finanvoToken) {
     finanvoClient.setAuthToken(req.finanvoToken);
   }

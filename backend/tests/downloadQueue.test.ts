@@ -1,3 +1,8 @@
+/*
+ * downloadQueue.test.ts
+ * Unit tests for the DownloadQueue class: enqueue behaviour, status lookup by ID,
+ * and handling of unknown IDs. Mocks downloadDocument so no real Finanvo calls are made.
+ */
 jest.mock('../src/services/finanvo/download.service', () => {
   const actual = jest.requireActual('../src/services/finanvo/download.service');
   return {

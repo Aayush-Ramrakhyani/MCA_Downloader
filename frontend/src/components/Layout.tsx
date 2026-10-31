@@ -1,10 +1,16 @@
+/*
+ * Layout.tsx
+ * Shell component rendering the top navigation bar with active-link highlighting,
+ * credit balance display, and an AccountSwitcher in Electron or a logout button on
+ * the web. All protected pages are wrapped in this component.
+ */
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useCredits } from '../hooks/useCredits';
 import AccountSwitcher from './AccountSwitcher';
 import type { ElectronAccount } from '../types/electron';
 
-const isElectron = !!window.electronAPI?.isElectron;
+const isElectron = !!window.electronAPI?.isElectron; // determines whether to show AccountSwitcher vs. plain logout
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { email, logout, login } = useAuth();
@@ -18,11 +24,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   const handleSwitchAccount = async (acc: ElectronAccount) => {
     try {
-      const pw = await window.electronAPI!.accounts.getPassword(acc.id);
+      const pw = await window.electronAPI!.accounts.getPassword(acc.id); // decrypt via IPC — never stored in renderer memory
       await login(acc.email, pw);
       navigate('/search');
     } catch {
-      navigate('/accounts');
+      navigate('/accounts'); // if login fails, redirect to account management
     }
   };
 

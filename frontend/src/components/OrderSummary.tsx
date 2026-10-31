@@ -1,3 +1,9 @@
+/*
+ * OrderSummary.tsx
+ * Displays a line-item order breakdown (sub-total, GST, credits applied, total due)
+ * and a Place Order button. Shows a warning banner when the order API is not yet
+ * configured (MISSING_API status).
+ */
 import type { OrderCalculation } from '../types';
 
 interface Props {

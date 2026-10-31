@@ -1,3 +1,9 @@
+/*
+ * document.controller.ts
+ * Express controller for retrieving documents for a given CIN: validates the CIN
+ * format, sets the session token on the shared Finanvo client, then delegates to the
+ * document service.
+ */
 import { Request, Response } from 'express';
 import { getCompanyDocuments } from '../services/finanvo/document.service';
 import { success, error } from '../utils/response';

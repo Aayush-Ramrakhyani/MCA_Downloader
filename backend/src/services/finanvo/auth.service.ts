@@ -1,3 +1,9 @@
+/*
+ * auth.service.ts
+ * Handles Finanvo authentication: logging in with credentials, extracting the
+ * session token from the response (path is configurable via FINANVO_TOKEN_PATH),
+ * logging out, and auto-login on server startup using environment credentials.
+ */
 import { FinanvoLoginRequest, FinanvoLoginResponse } from './types';
 import { finanvoClient } from './finanvo.client';
 import { env } from '../../config/env';
@@ -47,7 +53,7 @@ function extractToken(response: FinanvoLoginResponse): string {
     return value;
   }
 
-  // Log the top-level keys (not values) to help identify the correct path
+  // Log the top-level keys (not values) to help identify the correct path without leaking secrets
   const topLevelKeys = Object.keys(response);
   logger.error(
     'Token extraction failed. The field at FINANVO_TOKEN_PATH was not a non-empty string.',

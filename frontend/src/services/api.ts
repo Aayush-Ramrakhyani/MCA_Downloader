@@ -1,3 +1,9 @@
+/*
+ * api.ts
+ * Centralised Axios instance and typed API client modules for every backend
+ * endpoint. Injects the JWT from localStorage on every request and redirects
+ * to /login on 401 responses.
+ */
 import axios from 'axios';
 import type {
   ApiResponse,
@@ -9,7 +15,7 @@ import type {
 } from '../types';
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: '/api', // relative — works in both dev (Vite proxy) and production (same-origin backend)
   withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
   timeout: 30000,
@@ -17,7 +23,7 @@ const api = axios.create({
 
 api.interceptors.request.use(config => {
   const token = localStorage.getItem('mca_token');
-  if (token) config.headers['Authorization'] = `Bearer ${token}`;
+  if (token) config.headers['Authorization'] = `Bearer ${token}`; // attach stored JWT for authenticated requests
   return config;
 });
 
@@ -25,7 +31,7 @@ api.interceptors.response.use(
   res => res,
   err => {
     if (err.response?.status === 401 && window.location.pathname !== '/login') {
-      localStorage.removeItem('mca_token');
+      localStorage.removeItem('mca_token'); // clear stale token before redirecting
       window.location.href = '/login';
     }
     return Promise.reject(err);
@@ -83,7 +89,7 @@ export const downloadsApi = {
     return `/api/downloads/stream/${documentId}?${params.toString()}`;
   },
   zipDownload: (refKeys: string[], transactionId: string, companyName?: string) =>
-    api.post('/downloads/zip', { refKeys, transactionId, companyName }, { responseType: 'blob', timeout: 300000 }),
+    api.post('/downloads/zip', { refKeys, transactionId, companyName }, { responseType: 'blob', timeout: 300000 }), // 5-minute timeout for large ZIP bundles
 };
 
 // ─── Account ──────────────────────────────────────────────────

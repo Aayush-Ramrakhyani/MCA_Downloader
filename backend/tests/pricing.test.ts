@@ -1,3 +1,8 @@
+/*
+ * pricing.test.ts
+ * Unit tests for the order pricing calculation: slab rounding, GST calculation,
+ * credit application, and credit cap enforcement.
+ */
 import { calculateOrder, getPricingConfig } from '../src/services/pricing.service';
 
 describe('calculateOrder', () => {

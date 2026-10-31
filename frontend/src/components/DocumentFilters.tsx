@@ -1,3 +1,8 @@
+/*
+ * DocumentFilters.tsx
+ * Filter bar for the documents table: full-text search input plus dropdowns for
+ * category, form ID, and year, with a count indicator and a clear-all button.
+ */
 import type { DocumentFilters } from '../hooks/useDocuments';
 
 interface Props {

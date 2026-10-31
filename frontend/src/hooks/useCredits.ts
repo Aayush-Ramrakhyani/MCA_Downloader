@@ -1,3 +1,8 @@
+/*
+ * useCredits.ts
+ * Hook that fetches and caches the user's available Finanvo credit balance,
+ * exposing a refresh function so the Layout topbar can display live credit counts.
+ */
 import { useState, useEffect, useCallback } from 'react';
 import { accountApi, type CreditBalance } from '../services/api';
 

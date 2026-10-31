@@ -1,3 +1,9 @@
+/*
+ * DownloadsPage.tsx
+ * Shows the active download queue and completed download history. In Electron mode
+ * it also exposes a folder picker for changing the save directory. Polls every 3 s
+ * to reflect queue progress without a WebSocket.
+ */
 import { useState, useEffect } from 'react';
 import { downloadsApi } from '../services/api';
 import DownloadList from '../components/DownloadList';

@@ -1,3 +1,8 @@
+/*
+ * IntegrationBadge.tsx
+ * Renders a coloured badge for a given Finanvo API IntegrationStatus value,
+ * used on the Status page to visualise which endpoints have been implemented.
+ */
 import type { IntegrationStatus } from '../types';
 
 const STATUS_CONFIG: Record<IntegrationStatus, { label: string; cls: string }> = {

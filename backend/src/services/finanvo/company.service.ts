@@ -1,3 +1,9 @@
+/*
+ * company.service.ts
+ * Queries the Finanvo company-search endpoint and normalises the loosely-typed raw
+ * response into a consistent NormalizedCompany shape, trying multiple known field
+ * name variants to handle API response changes.
+ */
 import { finanvoClient } from './finanvo.client';
 import { FinanvoCompanyRaw, FinanvoCompanySearchResponse } from './types';
 import { logger } from '../../config/logger';
@@ -34,7 +40,7 @@ export async function searchCompanies(query: string): Promise<NormalizedCompany[
 function extractCompanyArray(response: FinanvoCompanySearchResponse): FinanvoCompanyRaw[] {
   if (Array.isArray(response)) return response as FinanvoCompanyRaw[];
 
-  const possibleArrayPaths = ['data', 'companies', 'results', 'items', 'list'];
+  const possibleArrayPaths = ['data', 'companies', 'results', 'items', 'list']; // common wrapper keys seen in Finanvo responses
   for (const path of possibleArrayPaths) {
     const candidate = (response as Record<string, unknown>)[path];
     if (Array.isArray(candidate)) return candidate as FinanvoCompanyRaw[];

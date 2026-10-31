@@ -1,3 +1,8 @@
+/*
+ * order.routes.ts
+ * Mounts order endpoints: price calculation preview, order placement, order listing,
+ * and per-order status polling.
+ */
 import { Router } from 'express';
 import {
   calculateOrderPreview,

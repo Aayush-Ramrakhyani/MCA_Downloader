@@ -1,3 +1,8 @@
+/*
+ * types.ts
+ * TypeScript interfaces for all Finanvo API request/response shapes and the
+ * INTEGRATION_STATUS registry that tracks which endpoints have been implemented.
+ */
 // ─────────────────────────────────────────────────────────────
 // Finanvo API Types
 //

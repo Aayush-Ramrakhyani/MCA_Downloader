@@ -1,3 +1,9 @@
+/*
+ * useDocuments.tsx
+ * Custom hook that manages document filter state (search, category, form ID, year)
+ * and selection state (individual toggle, select-all, clear-all) for the documents
+ * table, deriving filtered results and option lists via memoisation.
+ */
 import { useState, useMemo } from 'react';
 import type { Document } from '../types';
 

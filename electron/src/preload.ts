@@ -1,6 +1,12 @@
+/*
+ * preload.ts
+ * Electron preload script: runs in a privileged context with access to ipcRenderer
+ * and exposes a safe, typed window.electronAPI surface to the renderer via
+ * contextBridge, forming the IPC bridge between the UI and the main process.
+ */
 import { contextBridge, ipcRenderer } from 'electron';
 
-contextBridge.exposeInMainWorld('electronAPI', {
+contextBridge.exposeInMainWorld('electronAPI', { // exposed as window.electronAPI in the renderer
   // ─── Downloads ───────────────────────────────────────────
   selectFolder:    (): Promise<string | null> => ipcRenderer.invoke('dialog:selectFolder'),
   setDownloadDir:  (dir: string): Promise<void> => ipcRenderer.invoke('app:setDownloadDir', dir),

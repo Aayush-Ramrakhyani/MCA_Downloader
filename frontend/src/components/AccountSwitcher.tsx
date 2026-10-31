@@ -1,3 +1,9 @@
+/*
+ * AccountSwitcher.tsx
+ * Electron-only dropdown in the topbar that lists all saved accounts and lets the
+ * user switch the active session by clicking an avatar, fetching the stored password
+ * via IPC and re-authenticating transparently.
+ */
 import { useState, useEffect, useRef } from 'react';
 import type { ElectronAccount } from '../types/electron';
 import { useAuth } from '../hooks/useAuth';
@@ -13,7 +19,7 @@ export default function AccountSwitcher({ onSwitch }: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    window.electronAPI!.accounts.list().then(setAccounts);
+    window.electronAPI!.accounts.list().then(setAccounts); // refresh list each time the dropdown opens
   }, [open]);
 
   // Close on outside click

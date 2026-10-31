@@ -1,9 +1,8 @@
-/**
- * Pricing service.
- *
- * The live UI shows: ₹145 / 100 Docs / Company
- * These values come from configuration, NOT hardcoded constants.
- * If the API returns pricing data, update getPricingConfig() to use it.
+/*
+ * pricing.service.ts
+ * Calculates order totals (sub-total, GST, credits applied) based on the current
+ * pricing config. Defaults to ₹145 / 100 docs / company at 18% GST; can be
+ * overridden at runtime if the Finanvo API returns live pricing data.
  */
 
 export interface PricingConfig {
@@ -56,10 +55,10 @@ export function calculateOrder(opts: {
   const pricing = getPricingConfig();
   const { cin, companyName, selectedDocCount, availableCredits } = opts;
 
-  const subTotal = Math.ceil(selectedDocCount / 100) * pricing.ratePerHundredDocs;
+  const subTotal = Math.ceil(selectedDocCount / 100) * pricing.ratePerHundredDocs; // always round up to the next 100-doc slab
   const gstAmount = Math.round((subTotal * pricing.gstPercent) / 100);
   const totalAmount = subTotal + gstAmount;
-  const creditsApplied = Math.min(availableCredits, totalAmount);
+  const creditsApplied = Math.min(availableCredits, totalAmount); // credits cannot exceed the order total
   const amountDue = totalAmount - creditsApplied;
 
   return {

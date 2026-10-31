@@ -1,3 +1,8 @@
+/*
+ * CompanyCard.tsx
+ * Displays a single company search result with its name, CIN, status badge,
+ * registered state, class, and incorporation date. Clickable to navigate to documents.
+ */
 import type { Company } from '../types';
 
 interface Props {

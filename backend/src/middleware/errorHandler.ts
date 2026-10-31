@@ -1,3 +1,8 @@
+/*
+ * errorHandler.ts
+ * Global Express error-handling middleware: maps known MISSING_API errors to 501
+ * responses and converts all other unhandled exceptions to 500 JSON responses.
+ */
 import { Request, Response, NextFunction } from 'express';
 import { logger } from '../config/logger';
 import { error } from '../utils/response';

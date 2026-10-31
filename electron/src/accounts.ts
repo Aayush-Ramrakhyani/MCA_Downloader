@@ -1,3 +1,9 @@
+/*
+ * accounts.ts
+ * Manages saved Finanvo accounts in the Electron main process: stores account
+ * metadata in a JSON file and encrypts passwords using Electron's safeStorage
+ * (OS DPAPI on Windows), falling back to plain base64 in development.
+ */
 import { safeStorage, app } from 'electron';
 import fs from 'fs';
 import path from 'path';
@@ -50,15 +56,15 @@ export function addAccount(label: string, email: string, password: string): Acco
   }
 
   const encrypted = safeStorage.isEncryptionAvailable()
-    ? safeStorage.encryptString(password).toString('base64')
-    : Buffer.from(password, 'utf-8').toString('base64'); // fallback for dev
+    ? safeStorage.encryptString(password).toString('base64') // DPAPI-encrypted on Windows
+    : Buffer.from(password, 'utf-8').toString('base64'); // fallback for dev (not safe for production)
 
   const account: Account = {
     id: crypto.randomUUID(),
     label: label.trim() || email,
     email,
     encryptedPassword: encrypted,
-    color: COLORS[accounts.length % COLORS.length],
+    color: COLORS[accounts.length % COLORS.length], // cycles through the palette for visual distinction
     createdAt: Date.now(),
     lastUsed: 0,
   };

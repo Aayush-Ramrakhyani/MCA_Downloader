@@ -1,3 +1,8 @@
+/*
+ * order.controller.ts
+ * Handles order preview (local price calculation), order placement (calls Finanvo),
+ * order status polling, and listing all locally stored orders.
+ */
 import { Request, Response } from 'express';
 import { createOrder, getOrderStatus } from '../services/finanvo/order.service';
 import { calculateOrder } from '../services/pricing.service';
@@ -54,13 +59,13 @@ export async function placeOrder(req: Request, res: Response): Promise<void> {
       cin,
       companyName: companyName ?? null,
       documentIds,
-      status: result.submitted ? 'submitted' : 'pending_payment',
+      status: result.submitted ? 'submitted' : 'pending_payment', // 'submitted' means Finanvo queued the docs
       totalAmount: result.totalAmount,
       txnIds: result.txnIds,
       createdAt: Date.now(),
       updatedAt: Date.now(),
     };
-    saveOrder(record);
+    saveOrder(record); // persists locally for the Orders page history
     success(res, { ...result, localOrderId: record.id }, 'Order created', 201);
   } catch (err: unknown) {
     const msg = (err as Error).message ?? 'Order creation failed';

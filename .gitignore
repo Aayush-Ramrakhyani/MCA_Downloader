@@ -9,3 +9,4 @@ coverage/
 downloads/
 data/*.json
 !data/.gitkeep
+release/

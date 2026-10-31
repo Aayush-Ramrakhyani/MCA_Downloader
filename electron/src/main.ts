@@ -1,3 +1,9 @@
+/*
+ * main.ts
+ * Electron main process: spawns the Express backend as a child Node process,
+ * creates the BrowserWindow, and registers IPC handlers for the download-folder
+ * picker and the encrypted accounts store.
+ */
 import { app, BrowserWindow, ipcMain, dialog, shell } from 'electron';
 import path from 'path';
 import { spawn, ChildProcess } from 'child_process';
@@ -8,11 +14,11 @@ import {
   getDecryptedPassword, touchLastUsed, updateLabel,
 } from './accounts';
 
-// Auto-generate a persistent JWT secret per installation
+// Auto-generate a persistent JWT secret per installation (survives app restarts, unique per device)
 function getOrCreateJwtSecret(): string {
   const secretFile = path.join(app.getPath('userData'), 'jwt.secret');
   if (fs.existsSync(secretFile)) return fs.readFileSync(secretFile, 'utf-8').trim();
-  const secret = crypto.randomBytes(64).toString('hex');
+  const secret = crypto.randomBytes(64).toString('hex'); // 512-bit random secret
   fs.writeFileSync(secretFile, secret, 'utf-8');
   return secret;
 }
@@ -42,17 +48,17 @@ function startBackend(): Promise<void> {
     backendProcess = spawn(process.execPath, [backendEntry], {
       env: {
         ...process.env,
-        ELECTRON_RUN_AS_NODE: '1',
+        ELECTRON_RUN_AS_NODE: '1', // run backend entry as plain Node, not as Electron
         PORT: String(BACKEND_PORT),
         NODE_ENV: isDev ? 'development' : 'production',
         DOWNLOADS_DIR: downloadDir,
-        DB_PATH: path.join(app.getPath('userData'), 'db.json'),
-        JWT_SECRET: getOrCreateJwtSecret(),
+        DB_PATH: path.join(app.getPath('userData'), 'db.json'), // user-data dir survives app updates
+        JWT_SECRET: getOrCreateJwtSecret(), // per-install secret so tokens don't cross machines
         FINANVO_BASE_URL: 'https://api5.finanvo.in',
         FINANVO_TOKEN_PATH: 'data.token',
         CLIENT_URL: isDev
-          ? `http://localhost:${FRONTEND_PORT}`
-          : `http://localhost:${BACKEND_PORT}`,
+          ? `http://localhost:${FRONTEND_PORT}` // Vite dev server in dev
+          : `http://localhost:${BACKEND_PORT}`,  // backend serves frontend in production
       },
       cwd: isDev
         ? path.join(__dirname, '..', '..', 'backend')
@@ -63,14 +69,14 @@ function startBackend(): Promise<void> {
     backendProcess.stdout?.on('data', (data: Buffer) => {
       const line = data.toString();
       console.log('[backend]', line.trim());
-      if (line.includes(`port ${BACKEND_PORT}`) || line.includes('listening')) resolve();
+      if (line.includes(`port ${BACKEND_PORT}`) || line.includes('listening')) resolve(); // resolve as soon as the backend confirms it is ready
     });
 
     backendProcess.stderr?.on('data', (d: Buffer) =>
       console.error('[backend:err]', d.toString().trim()));
 
     backendProcess.on('error', reject);
-    setTimeout(resolve, 3000);
+    setTimeout(resolve, 3000); // fallback: assume ready after 3 s if no "listening" log appears
   });
 }
 
@@ -86,8 +92,8 @@ function createWindow(): void {
     backgroundColor: '#0f1117',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      contextIsolation: true,
-      nodeIntegration: false,
+      contextIsolation: true,  // prevents renderer from accessing Node globals
+      nodeIntegration: false,  // all Node access goes through the IPC bridge in preload.ts
     },
     show: false,
   });
@@ -102,8 +108,8 @@ function createWindow(): void {
   });
 
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    if (url.startsWith('http')) shell.openExternal(url);
-    return { action: 'deny' };
+    if (url.startsWith('http')) shell.openExternal(url); // open external links in the system browser
+    return { action: 'deny' }; // prevent opening new Electron windows
   });
 
   mainWindow.on('closed', () => { mainWindow = null; });
@@ -136,12 +142,11 @@ ipcMain.handle('accounts:delete', (_e, id: string) => deleteAccount(id));
 
 ipcMain.handle('accounts:updateLabel', (_e, id: string, label: string) => updateLabel(id, label));
 
-// Returns the plain password for a given account ID so the renderer
-// can call the backend's /api/auth/login on behalf of that account.
-// The password never travels as plain text beyond this process boundary
-// — the renderer immediately POSTs it to localhost (our own backend).
+// Returns the plain password for a given account ID so the renderer can call
+// /api/auth/login on behalf of that account. The password never leaves the
+// localhost boundary — the renderer immediately POSTs it to our own backend.
 ipcMain.handle('accounts:getPassword', (_e, id: string) => {
-  touchLastUsed(id);
+  touchLastUsed(id); // update lastUsed timestamp for account-switcher ordering
   return getDecryptedPassword(id);
 });
 

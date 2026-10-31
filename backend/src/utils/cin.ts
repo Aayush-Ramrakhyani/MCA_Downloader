@@ -1,3 +1,8 @@
+/*
+ * cin.ts
+ * Utilities for validating, normalising, and parsing Indian Corporate Identity Numbers
+ * (CINs). Used by the document controller, document service, and test suite.
+ */
 // CIN format: [L/U][5 digits][2-letter state][4-digit year][PLC/PTC/NPL/...][6 digits]
 // Example: U72502GJ2013PTC074235  or  L17110MH1973PLC019786
 const CIN_REGEX = /^[LU]\d{5}[A-Z]{2}\d{4}[A-Z]{2,5}\d{6}$/;

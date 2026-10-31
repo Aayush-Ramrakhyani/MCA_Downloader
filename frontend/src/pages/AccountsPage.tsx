@@ -1,8 +1,15 @@
+/*
+ * AccountsPage.tsx
+ * Electron-only account management page. Stores one Finanvo account at a time via
+ * the Electron IPC accounts API, auto-logs in on launch if a saved account exists,
+ * and provides a form to add or switch accounts with OS-encrypted password storage.
+ */
 import { useState, useEffect, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import type { ElectronAccount } from '../types/electron';
 
+// Maps raw error messages to human-readable strings for display in the accounts UI
 function parseLoginError(err: Error): string {
   const msg = err.message ?? '';
   if (msg.includes('401') || msg.includes('Invalid email') || msg.includes('INVALID_CREDENTIALS'))

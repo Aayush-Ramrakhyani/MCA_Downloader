@@ -1,3 +1,8 @@
+/*
+ * electron.d.ts
+ * TypeScript ambient declarations for window.electronAPI — the IPC bridge surface
+ * exposed by the preload script. Also exports ElectronAccount for use in components.
+ */
 export {};
 
 export interface ElectronAccount {

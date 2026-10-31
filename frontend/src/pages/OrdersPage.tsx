@@ -1,3 +1,8 @@
+/*
+ * OrdersPage.tsx
+ * Lists the user's Finanvo transaction history. Completed orders show a
+ * "Download Docs" button that navigates to DocumentsPage in ZIP-download mode.
+ */
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { accountApi, type FinanvoTransaction } from '../services/api';
@@ -57,7 +62,7 @@ export default function OrdersPage() {
                 const amt   = raw['AMOUNT'] ? `₹${raw['AMOUNT']}` : (t.amount ? `₹${t.amount}` : '—');
                 const total = t.amount      ? `₹${t.amount}`      : '—';
                 const date  = t.createdAt   ? new Date(t.createdAt).toLocaleDateString('en-IN') : '—';
-                const canDownload = t.status === 'completed' && t.cin && t.txnId;
+                const canDownload = t.status === 'completed' && t.cin && t.txnId; // only completed orders with a known txnId can be downloaded
                 return (
                   <tr key={t.id}>
                     <td className="text-sm">{t.companyName || '—'}</td>

@@ -1,3 +1,8 @@
+/*
+ * cin.test.ts
+ * Unit tests for CIN validation, normalisation, and parsing utilities.
+ * Does not call any external services.
+ */
 import { isValidCin, normalizeCin, parseCin } from '../src/utils/cin';
 
 describe('CIN validation', () => {

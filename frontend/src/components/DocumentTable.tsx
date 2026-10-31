@@ -1,3 +1,9 @@
+/*
+ * DocumentTable.tsx
+ * Renders the pageable documents table with per-row checkboxes, a header
+ * indeterminate checkbox for select-all/deselect-all, and columns for name,
+ * form ID, year, category, filing date, and SRN.
+ */
 import type { Document } from '../types';
 
 interface Props {
@@ -44,7 +50,7 @@ export default function DocumentTable({ documents, selectedIds, onToggle, onSele
                 <input
                   type="checkbox"
                   checked={allSelected}
-                  ref={el => { if (el) el.indeterminate = someSelected && !allSelected; }}
+                  ref={el => { if (el) el.indeterminate = someSelected && !allSelected; }} // native indeterminate state for partial selection
                   onChange={() => allSelected ? onClearAll() : onSelectAll()}
                 />
               </th>

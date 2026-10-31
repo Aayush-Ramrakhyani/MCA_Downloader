@@ -1,3 +1,9 @@
+/*
+ * DocumentsPage.tsx
+ * Shows the filterable document list for a CIN. In "paid order" mode (transactionId
+ * in router state) it offers ZIP download; in normal mode it shows the order summary
+ * panel and lets the user place an order via the Finanvo API.
+ */
 import { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { companiesApi, ordersApi, downloadsApi } from '../services/api';
@@ -14,7 +20,7 @@ export default function DocumentsPage() {
 
   const locationState = location.state as { company?: Company; transactionId?: string } | null;
   const company = locationState?.company ?? null;
-  const transactionId = locationState?.transactionId ?? null;
+  const transactionId = locationState?.transactionId ?? null; // present when navigating from an Orders row (enables ZIP download mode)
 
   const [result, setResult] = useState<DocumentsResult | null>(null);
   const [loading, setLoading] = useState(true);
@@ -72,9 +78,9 @@ export default function DocumentsPage() {
       a.href     = url;
       a.download = `${result?.companyName ?? company?.name ?? 'documents'}.zip`;
       document.body.appendChild(a);
-      a.click();
+      a.click(); // programmatic click to trigger the browser's save dialog
       document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
+      window.URL.revokeObjectURL(url); // release the object URL to free memory
     } catch {
       setZipError('Download failed. Make sure these documents are included in your paid order.');
     } finally {
@@ -92,7 +98,7 @@ export default function DocumentsPage() {
     } catch (err: unknown) {
       const msg = (err as { response?: { data?: { message?: string }; status?: number } }).response?.data?.message ?? '';
       if ((err as { response?: { status?: number } }).response?.status === 501) {
-        setOrderMissingApi(true);
+        setOrderMissingApi(true); // 501 = backend explicitly signals the API endpoint is not yet implemented
       } else {
         setOrderError(msg || 'Order placement failed');
       }

@@ -1,3 +1,9 @@
+/*
+ * download.service.ts
+ * Streams documents from the Finanvo download endpoint and saves them to the local
+ * downloads directory. Also contains the DownloadQueue class that manages concurrent
+ * downloads with automatic retry logic.
+ */
 import { Readable } from 'stream';
 import path from 'path';
 import fs from 'fs';
@@ -33,8 +39,8 @@ export async function downloadDocumentStream(
   }
 
   const params = new URLSearchParams({
-    transaction_id: input.orderId,
-    ref_key: input.documentId,
+    transaction_id: input.orderId, // the txn ID returned by saveCinDinPayment
+    ref_key: input.documentId,     // the ref_key from the document list
   });
 
   const res = await finanvoClient.getStream(
@@ -105,7 +111,7 @@ export interface QueueItem {
   retries: number;
 }
 
-const MAX_RETRIES = 3;
+const MAX_RETRIES = 3; // after 3 failures the item is marked permanently failed
 
 class DownloadQueue {
   private queue: QueueItem[] = [];
@@ -137,14 +143,14 @@ class DownloadQueue {
   }
 
   private processNext(): void {
-    while (this.activeCount < this.concurrency) {
+    while (this.activeCount < this.concurrency) { // fill available concurrency slots
       const pending = this.queue.find(item => item.status === 'pending');
       if (!pending) break;
       this.activeCount++;
       pending.status = 'downloading';
       this.download(pending).finally(() => {
         this.activeCount--;
-        this.processNext();
+        this.processNext(); // pick up the next pending item when a slot frees
       });
     }
   }
@@ -175,4 +181,4 @@ class DownloadQueue {
   }
 }
 
-export const downloadQueue = new DownloadQueue(env.downloadConcurrency);
+export const downloadQueue = new DownloadQueue(env.downloadConcurrency); // shared singleton, concurrency controlled by DOWNLOAD_CONCURRENCY env var

@@ -1,3 +1,8 @@
+/*
+ * account.service.ts
+ * Fetches user profile data, credit balance (DOWN_DOCS_V3 plan), and transaction
+ * history from the Finanvo API and normalises them into typed interfaces.
+ */
 import { finanvoClient } from './finanvo.client';
 
 export interface UserProfile {
@@ -45,7 +50,7 @@ export async function getUserProfile(): Promise<UserProfile> {
 }
 
 export async function getCreditBalance(): Promise<CreditBalance> {
-  // Response is {"data": 0} — just a number, not an object
+  // Response is {"data": 0} — just a number, not an object; "used" and "total" are unavailable from this endpoint
   const res = await finanvoClient.get<{ data: number }>('/subscription/creditcount?code=DOWN_DOCS_V3');
   const available = Number(res.data?.data ?? 0);
   return { code: 'DOWN_DOCS_V3', available, used: 0, total: 0 };
@@ -58,7 +63,7 @@ export async function getTransactions(): Promise<FinanvoTransaction[]> {
   const items = Array.isArray(res.data?.data) ? res.data.data : [];
 
   return items.map((t, i) => {
-    const isCompleted = Number(t['STATUS']) === 2 || t['PAYMENT_TYPE'] != null;
+    const isCompleted = Number(t['STATUS']) === 2 || t['PAYMENT_TYPE'] != null; // STATUS=2 means paid and docs queued
     const docCount = t['total_documents'] && t['total_documents'] !== '-'
       ? Number(t['total_documents'])
       : 0;

@@ -1,3 +1,8 @@
+/*
+ * index.ts
+ * Shared TypeScript types mirroring the backend's normalised API shapes, used across
+ * all frontend components, hooks, and pages to ensure type-safe API consumption.
+ */
 // ─── Shared types mirroring backend normalized shapes ───────────
 
 export interface Company {

@@ -1,3 +1,8 @@
+/*
+ * company.test.ts
+ * Unit tests for the company search service: query validation, response normalisation,
+ * and wrapped response shape handling. Uses a mocked Finanvo client — no live API calls.
+ */
 jest.mock('../src/services/finanvo/finanvo.client', () => ({
   finanvoClient: {
     get: jest.fn(),

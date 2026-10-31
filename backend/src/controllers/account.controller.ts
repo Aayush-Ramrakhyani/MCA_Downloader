@@ -1,3 +1,8 @@
+/*
+ * account.controller.ts
+ * Exposes endpoints for fetching the logged-in user's Finanvo profile, credit
+ * balance, and transaction history by delegating to the account service.
+ */
 import { Request, Response } from 'express';
 import { getUserProfile, getCreditBalance, getTransactions } from '../services/finanvo/account.service';
 import { finanvoClient } from '../services/finanvo/finanvo.client';

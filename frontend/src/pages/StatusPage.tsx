@@ -1,3 +1,9 @@
+/*
+ * StatusPage.tsx
+ * Developer-facing page showing which Finanvo API endpoints have been implemented,
+ * partially implemented, or are still missing, along with instructions for capturing
+ * new endpoints from Chrome DevTools.
+ */
 import { useState, useEffect } from 'react';
 import { integrationApi } from '../services/api';
 import IntegrationBadge from '../components/IntegrationBadge';

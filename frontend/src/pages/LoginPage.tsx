@@ -1,3 +1,8 @@
+/*
+ * LoginPage.tsx
+ * Web-mode login form (non-Electron). Collects Finanvo email and password,
+ * delegates to useAuth.login, and redirects to /search on success.
+ */
 import { useState, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
